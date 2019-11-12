@@ -6,6 +6,7 @@ from universal import tools
 import seaborn as sns
 from statsmodels.api import OLS
 from matplotlib.colors import ListedColormap
+from scipy.stats import norm
 
 
 class PickleMixin(object):
@@ -153,13 +154,28 @@ class AlgoResult(PickleMixin):
 
     @property
     def ucrp_sharpe(self):
-        from universal.algos import CRP
+        from algos import CRP
         result = CRP().run(self.X.cumprod())
         return result.sharpe
 
     @property
     def growth_rate(self):
         return self.r_log.mean() * self.freq()
+
+    def var(self, confidence=1):
+        return norm.ppf(1-confidence, self.r_log.mean(), self.r_log.std())
+
+    @property
+    def var90(self):
+        return self.var(0.9)
+
+    @property
+    def var95(self):
+        return self.var(0.95)
+
+    @property
+    def var99(self):
+        return self.var(0.99)
 
     @property
     def volatility(self):
