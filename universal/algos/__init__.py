@@ -18,4 +18,5 @@ from .dynamic_crp import DynamicCRP
 from .best_so_far import BestSoFar
 from .best_markowitz import BestMarkowitz
 from .mpt import MPT
+from .mc import MC
 from .estimators import *
